@@ -1,33 +1,33 @@
 {
-  description = "nix-library: dev environment flake templates";
+  description = "nix-library: packages and dev flake template collection";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
   };
 
-  outputs = { self, nixpkgs }@inputs: let
-    system = "x86_64-linux";
-    pkgs = import nixpkgs { inherit system;};
-    m8pkgs = import ./pkgs { inherit pkgs; };
+  outputs = { self, nixpkgs, ... }:
+  let
+    systems = [ "x86_64-linux" "aarch64-linux" ];
+    defaultSystem = "x86_64-linux";
+    forAllSystems = f: builtins.listToAttrs (map (system: {
+      name = system;
+      value = f system;
+    }) systems);
+    pkgsBySystem = forAllSystems (system:
+      import ./pkgs/all-packages.nix {
+        pkgs = import nixpkgs { inherit system; };
+      }
+    );
   in
   {
+    m8pkgs = pkgsBySystem.${defaultSystem};
+
     templates = {
       bevy = {
         path = ./templates/bevy;
         description = "Rust / Bevy Engine development environment";
       };
     };
-
-    packages.${system} = m8pkgs;
-    defaultPackage.${system} = m8pkgs.slidev;
-
-    apps.${system}.slidev = {
-      type = "app";
-      program = "${m8pkgs.slidev}/bin/slidev";
-    };
-
-    defaultApp.${system} = self.apps.${system}.slidev;
-
   };
 }
 
