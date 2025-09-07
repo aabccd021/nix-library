@@ -1,7 +1,6 @@
 {
   description = "nix-library: dev environment flake templates";
 
-  outputs = { self }: {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
   };
@@ -18,7 +17,17 @@
         description = "Rust / Bevy Engine development environment";
       };
     };
+
     packages.${system} = m8pkgs;
+    defaultPackage.${system} = m8pkgs.slidev;
+
+    apps.${system}.slidev = {
+      type = "app";
+      program = "${m8pkgs.slidev}/bin/slidev";
+    };
+
+    defaultApp.${system} = self.apps.${system}.slidev;
+
   };
 }
 
