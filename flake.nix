@@ -20,7 +20,7 @@
     );
   in
   {
-    m8pkgs = pkgsBySystem.${defaultSystem};
+    pkgs = pkgsBySystem.${defaultSystem};
 
     templates = {
       bevy = {
