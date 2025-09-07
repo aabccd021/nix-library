@@ -1,6 +1,16 @@
 { lib, stdenv, nodejs, pnpm_9, fetchFromGitHub, callPackage, makeWrapper, }:
 stdenv.mkDerivation (finalAttrs: {
 
+  meta = {
+    description = "Presentation Slides for Developers";
+    homepage = "https://sli.dev/";
+    changelog =
+      "https://github.com/slidevjs/slidev/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    mainProgram = "slidev";
+    maintainers = with lib.maintainers; [ ];
+  };
+
   pname = "slidev";
   version = "0.49.29";
   src = fetchFromGitHub {
@@ -12,9 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ nodejs pnpm_9.configHook makeWrapper ];
 
+  dontPatchELF = true;
+  dontStrip = true;
+  dontCheckForBrokenSymlinks = true;
+
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-gyAqtNvMBef9Y9+bnm3O1NwDmsB48l3UHxCWOmxPUd0=";
+    fetcherVersion = 1;
+    hash = "sha256-18/6hNsRq0hl1UXY6cchuIEVWTbCiZJG33QHDvnXS1A=";
   };
 
   buildPhase = ''
@@ -39,16 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
-
-  meta = {
-    description = "Presentation Slides for Developers";
-    homepage = "https://sli.dev/";
-    changelog =
-      "https://github.com/slidevjs/slidev/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.mit;
-    mainProgram = "slidev";
-    maintainers = with lib.maintainers; [ ];
-  };
 })
 
 
