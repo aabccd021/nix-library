@@ -12,12 +12,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   pname = "slidev";
-  version = "0.49.29";
+  version = "0.50.0-beta.11";
   src = fetchFromGitHub {
     owner = "slidevjs";
     repo = "slidev";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bOSIJTzPMyS+wbJsLVaMw/wicbsgQADEOyQQjU8MKWw=";
+    hash = "sha256-JLuWqwKDHiYIiW9kECPizCVXMOMPU/LSLXjh5U6wdNQ=";
   };
 
   nativeBuildInputs = [ nodejs pnpm_9.configHook makeWrapper ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-18/6hNsRq0hl1UXY6cchuIEVWTbCiZJG33QHDvnXS1A=";
+    hash = "sha256-tv3yi0A5F7diz3r2Q4F0tjm6Cyv0tblm/ftvvTh+BWk=";
   };
 
   buildPhase = ''
